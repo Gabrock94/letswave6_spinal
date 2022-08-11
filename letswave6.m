@@ -3,4 +3,3 @@ function letswave6
 disp('This is Letswave 6');
 letswave;
 end
-
