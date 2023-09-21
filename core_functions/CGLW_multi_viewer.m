@@ -1380,7 +1380,7 @@ CGLW_my_view_OpeningFcn;
             for ax_idx=1:ax_num
                 axes_topo(ax_idx)=subplot(row_num,col_num,ax_idx);
                 set(axes_topo(ax_idx),'Xlim',[-0.55,0.55]);
-                set(axes_topo(ax_idx),'Ylim',[-4, 0]);
+                set(axes_topo(ax_idx),'Ylim',[-4, 0.6]);
                 caxis(axes_topo(ax_idx),userdata.last_axis(3:4));
                 hold(axes_topo(ax_idx),'on');
                 axis(axes_topo(ax_idx),'square');
@@ -1485,7 +1485,7 @@ CGLW_my_view_OpeningFcn;
                     handles.axes_topo(ax_idx)=axes('Parent',handles.panel_fig,'units','pixels');
                     caxis(handles.axes_topo(ax_idx),userdata.last_axis(3:4));
                     set(handles.axes_topo(ax_idx),'Xlim',[-0.55,0.55]);
-                    set(handles.axes_topo(ax_idx),'Ylim',[-4, 0]);
+                    set(handles.axes_topo(ax_idx),'Ylim',[-4, 0.6]);
                     axis(handles.axes_topo(ax_idx),'square');
                     hold(handles.axes_topo(ax_idx),'on')
                     handles.title_topo(ax_idx)=title(handles.axes_topo(ax_idx),'hello','Interpreter','none');

@@ -208,7 +208,7 @@ handle = [];
 Zi = [];
 chanval = NaN;
 rmax = 0.5;             % actual head radius - Don't change this!
-INTERPLIMITS = 'head';  % head, electrodes
+INTERPLIMITS = 'electrodes';  % head, electrodes
 INTSQUARE = 'on';       % default, interpolate electrodes located though the whole square containing
                         % the plotting disk
 default_intrad = 1;     % indicator for (no) specified intrad
@@ -220,8 +220,8 @@ CONTOURNUM = 6;         % number of contour levels to plot
 STYLE = 'both';         % default 'style': both,straight,fill,contour,blank
 HEADCOLOR = [0 0 0];    % default head color (black)
 CCOLOR = [0.2 0.2 0.2]; % default contour color
-ELECTRODES = [];        % default 'electrodes': on|off|label - set below
-MAXDEFAULTSHOWLOCS = 64;% if more channels than this, don't show electrode locations by default
+ELECTRODES = 'on';        % default 'electrodes': on|off|label - set below
+MAXDEFAULTSHOWLOCS = 200;% if more channels than this, don't show electrode locations by default
 EMARKER = '.';          % mark electrode locations with small disks
 ECOLOR = [0 0 0];       % default electrode color = black
 EMARKERSIZE = [];       % default depends on number of electrodes, set in code
@@ -744,7 +744,7 @@ if isempty(plotrad) & isfield(tmpeloc, 'plotrad'),
     end
 end;
 if isempty(plotrad) 
-  plotrad = min(1.0,max(Rd)*1.02);            % default: just outside the outermost electrode location
+  plotrad = min(5.0,max(Rd)*1.02);            % default: just outside the outermost electrode location
   plotrad = max(plotrad,0.5);                 % default: plot out to the 0.5 head boundary
 end                                           % don't plot channels with Rd > 1 (below head)
 
@@ -757,7 +757,7 @@ else
      plotrad = intrad;
   end
 end                                           % don't interpolate channels with Rd > 1 (below head)
-if isstr(plotrad) | plotrad < MINPLOTRAD | plotrad > 1.0
+if isstr(plotrad) | plotrad < MINPLOTRAD | plotrad > 10.0
    error('plotrad must be between 0.15 and 1.0');
 end
 
@@ -963,10 +963,10 @@ if ~strcmpi(STYLE,'blank') % if draw interpolated scalp map
   %
   %%%%%%%%%%%%%%%%%%%%%%% Mask out data outside the head %%%%%%%%%%%%%%%%%%%%%
   %
-  mask = (sqrt(Xi.^2 + Yi.^2) <= rmax); % mask outside the plotting circle
-  ii = find(mask == 0);
-  Zi(ii)  = NaN;                         % mask non-plotting voxels with NaNs  
-  ZiC(ii) = NaN;                         % mask non-plotting voxels with NaNs
+  %mask = (sqrt(Xi.^2 + Yi.^2) <= rmax); % mask outside the plotting circle
+  %ii = find(mask == 0);
+  %Zi(ii)  = NaN;                         % mask non-plotting voxels with NaNs  
+  %ZiC(ii) = NaN;                         % mask non-plotting voxels with NaNs
   grid = plotrad;                       % unless 'noplot', then 3rd output arg is plotrad
   %
   %%%%%%%%%% Return interpolated value at designated scalp location %%%%%%%%%%
@@ -1030,7 +1030,7 @@ if ~strcmpi(STYLE,'blank') % if draw interpolated scalp map
                           % shrunk enough by the 'skirt' option
   end
 
-  set(gca,'Xlim',[-rmax rmax]*AXHEADFAC,'Ylim',[-rmax rmax]*AXHEADFAC);
+  set(gca,'Xlim',[-rmax rmax]*AXHEADFAC,'Ylim',[-rmax rmax]);
                           % specify size of head axes in gca
 
   unsh = (GRID_SCALE+1)/GRID_SCALE; % un-shrink the effects of 'interp' SHADING
@@ -1275,7 +1275,7 @@ if strcmp(CONVHULL,'on') %%%%%%%%% mask outside the convex hull of the electrode
   ringy = [[ry(:)' ry(1) ]*(rin+rwidth) yy yy(1)];
   ringx = [[rx(:)' rx(1) ]*(rin+rwidth) xx xx(1)];
 
-  ringh2= patch(ringy,ringx,ones(size(ringy)),BACKCOLOR,'edgecolor','none'); hold on
+  ringh2= patch(ringy*1,ringx*1,ones(size(ringy)),BACKCOLOR,'edgecolor','none'); hold on
 
   % plot(ry*rmax,rx*rmax,'b') % debugging line
 
@@ -1375,8 +1375,8 @@ end
  set(plotax,'ylim',ylm);                               % copy position and axis limits again
 
 axis equal;
-set(gca, 'xlim', [-0.525 0.525]); set(plotax, 'xlim', [-0.525 0.525]);
-set(gca, 'ylim', [-0.525 0.525]); set(plotax, 'ylim', [-0.525 0.525]);
+set(gca, 'xlim', [-0.1 0.1]); set(plotax, 'xlim', [-0.1 0.1]);
+set(gca, 'ylim', [-0.525 0.2]); set(plotax, 'ylim', [-0.525 0.2]);
  
 %get(textax,'pos')    % test if equal!
 %get(plotax,'pos')
